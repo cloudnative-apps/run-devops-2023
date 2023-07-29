@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  shoppingapi
+  namespace: default
+  labels:
+    app:  shoppingapi
+spec:
+  selector:
+    matchLabels:
+      app: shoppingapi
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app:  shoppingapi
+    spec:    
+      containers:
+      - name:  shoppingapi
+        image:  sharadit/runshoppingapi:latest
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 250m
+            memory: 100Mi
+          limits:
+            cpu: 500m
+            memory: 200Mi
+        # livenessProbe:
+        #   tcpSocket:
+        #     port: 80
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 5
+        #   successThreshold: 1
+        #   failureThreshold: 3
+        #   periodSeconds: 10
+        # readinessProbe:
+        #   httpGet:
+        #     path: /_status/healthz
+        #     port: 80
+        #   initialDelaySeconds: 5
+        #   timeoutSeconds: 2
+        #   successThreshold: 1
+        #   failureThreshold: 3
+        #   periodSeconds: 10
+        env:
+        - name: ASPNETCORE_ENVIRONMENT
+          value: Development
+        - name:  DatabaseSettings__ConnectionString
+          value:  mongodb://username:password@mongo-service:27017  
+          
+        ports:
+        - containerPort:  80
+          name:  shoppingapi        
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoppingapi-service
+spec:  
+  #type: NodePort
+  selector:
+    app: shoppingapi
+  ports:
+    - protocol: TCP
+      port: 80   
+      #targetPort: 80
+      #nodePort: 31000   

@@ -1,0 +1,29 @@
+version: '3.4'
+
+services:
+  runshoppingapi:
+    container_name: runshoppingapi
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "DatabaseSettings:ConnectionString=mongodb://runshopping_db:27017" 
+    ports:
+      - "8001:80"
+
+  runshoppingclient:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      #- ASPNETCORE_URLS=https://+:443;http://+:80
+      - "ShoppingAPIUrl=http://runshoppingapi"
+    ports:
+      - "8002:80"
+      #- "443"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  shopping_db:
+    container_name: runshopping_db
+    restart: always
+    ports: 
+      - "27017:27017"
+    volumes:
+      - ${HOME}/site/data:/db    
