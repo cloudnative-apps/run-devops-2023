@@ -1,0 +1,27 @@
+  az group create --name learn-shopping --location westeurope
+  az acr create --resource-group learn-shopping --name learnshoppingacr --sku Basic
+
+
+az acr list --resource-group learn-shopping --query "[].{acrLoginServer:loginServer}" --output table
+
+docker tag runshoppingclient:latest learnshoppingacr.azurecr.io/shoppingclient:v1
+docker tag runshoppingapi:latest docker push 
+
+az acr repository list --name learnshoppingacr --output table
+ 
+
+ az aks create --resource-group learn-shopping --name learnshoppingAKS --node-count 1 --generate-ssh-keys --attach-acr learnshoppingacr
+
+ az aks get-credentials --resource-group learn-shopping --name learnshoppingAKS
+
+ To verify;
+kubectl get nodes
+kubectl get all
+--
+Check Kube Config
+
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context gcpcluster-k8s-1
+	Switched to context "gcpcluster-k8s-1"
+--
