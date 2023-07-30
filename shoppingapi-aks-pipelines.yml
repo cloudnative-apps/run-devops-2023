@@ -3,7 +3,13 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - src/RunShoppingApi/*
+    - aks/shoppingapi.yaml
 
 resources:
 - repo: self
@@ -14,7 +20,7 @@ variables:
   dockerRegistryServiceConnection: '02682680-0bcc-4c0d-a807-7d43e5f662e0'
   imageRepository: 'shoppingapi'
   containerRegistry: 'learnshoppingacr.azurecr.io'
-  dockerfilePath: '**/Dockerfile'
+  dockerfilePath: 'src/RunShoppingApi/Dockerfile'
   tag: '$(Build.BuildId)'
   imagePullSecret: 'learnshoppingacr15641b5a-auth'
 
