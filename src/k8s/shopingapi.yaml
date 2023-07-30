@@ -52,8 +52,7 @@ spec:
         - name: ASPNETCORE_ENVIRONMENT
           value: Development
         - name:  DatabaseSettings__ConnectionString
-          value:  mongodb://username:password@mongo-service:27017  
-          
+          value:  mongodb://username:password@mongo-service:27017          
         ports:
         - containerPort:  80
           name:  shoppingapi        
