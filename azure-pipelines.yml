@@ -13,7 +13,7 @@ variables:
   dockerRegistryServiceConnection: '874ef882-f04b-4468-bc46-35222665cb46'
   imageRepository: 'cloudnativeappsrundevops'
   containerRegistry: 'learnshoppingacr.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/src/ShoppingClient/RunShoppingApi/Dockerfile'
+  dockerfilePath: '$(Build.SourcesDirectory)/src/RunShoppingApi/Dockerfile'
   tag: '$(Build.BuildId)'
 
   # Agent VM image name
@@ -26,7 +26,7 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      vmImage: $(vmImageName)
+      name: Default
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
@@ -35,6 +35,6 @@ stages:
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
         containerRegistry: $(dockerRegistryServiceConnection)
-        buildContext: $(Build.SourcesDirectory)/src/ShoppingClient
+        buildContext: $(Build.SourcesDirectory)/src/
         tags: |
           $(tag)
